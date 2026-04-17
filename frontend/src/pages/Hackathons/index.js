@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import { FaRegCalendarAlt } from 'react-icons/fa';
-import { format, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import 'react-toastify/dist/ReactToastify.css';
 import api from '../../services/api';
+import { formatDate } from '../../utils/dateLocale';
 
 import DefaultCover from '../../assets/default_cover.jpg';
 import Link from '../../components/Link';
@@ -20,6 +22,7 @@ export default function Hackathons() {
   const [loading, setLoading] = useState(true);
   const [meParticipants, setMeParticipants] = useState([]);
   const [meHackathons, setMeHackathons] = useState([]);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     async function loadData() {
@@ -39,7 +42,7 @@ export default function Hackathons() {
   async function handleDeleteHackathon(id) {
     try {
       // eslint-disable-next-line no-alert
-      const action = window.confirm('Are you sure about that?');
+      const action = window.confirm(t('common.confirm_delete'));
 
       if (action) {
         await api.delete(`/v1/hackathons/${id}`);
@@ -50,7 +53,7 @@ export default function Hackathons() {
 
         setMeHackathons(newMeHackathons);
 
-        toast('Hackathon deleted!', {
+        toast(t('hackathons.deleted'), {
           className: 'toast-background-success',
           bodyClassName: 'toast-font-size',
           progressClassName: 'toast-progress-bar-success',
@@ -74,8 +77,8 @@ export default function Hackathons() {
     <LoadingScreen />
   ) : (
     <Container>
-      <h1>My Hackathons</h1>
-      <h2 className="heading_section">Manage your hackathons</h2>
+      <h1>{t('hackathons.title')}</h1>
+      <h2 className="heading_section">{t('hackathons.manage_section')}</h2>
       <ManageHackathonContainer>
         {meHackathons.length > 0 ? (
           meHackathons.map(hackathon => (
@@ -96,10 +99,11 @@ export default function Hackathons() {
                   <div>
                     <FaRegCalendarAlt color="#1437E3" size={18} />
                     <span>
-                      Start:{' '}
-                      {format(
+                      {t('hackathons.start')}{' '}
+                      {formatDate(
                         parseISO(hackathon.event_date),
-                        "MMMM dd',' yyyy"
+                        "MMMM dd',' yyyy",
+                        i18n.language
                       )}
                     </span>
                   </div>
@@ -107,10 +111,11 @@ export default function Hackathons() {
                   <div>
                     <FaRegCalendarAlt color="#1437E3" size={18} />
                     <span>
-                      End:{' '}
-                      {format(
+                      {t('hackathons.end')}{' '}
+                      {formatDate(
                         parseISO(hackathon.event_ending),
-                        "MMMM dd',' yyyy"
+                        "MMMM dd',' yyyy",
+                        i18n.language
                       )}
                     </span>
                   </div>
@@ -118,7 +123,7 @@ export default function Hackathons() {
                   <div className="actions">
                     <Link
                       to={`/app/hackathon/${hackathon.id}/details`}
-                      text="Details"
+                      text={t('hackathons.details')}
                       style={{
                         maxWidth: '80px',
                         backgroundColor: 'green',
@@ -127,10 +132,10 @@ export default function Hackathons() {
                     />
                     <Link
                       to={`/app/hackathon/${hackathon.id}/edit`}
-                      text="Edit"
+                      text={t('hackathons.edit')}
                     />
                     <Button
-                      text="Delete"
+                      text={t('hackathons.delete')}
                       color="#E3143E"
                       type="button"
                       onClick={() => handleDeleteHackathon(hackathon.id)}
@@ -141,11 +146,11 @@ export default function Hackathons() {
             </Card>
           ))
         ) : (
-          <h3>You do not have any hackathon to manage!</h3>
+          <h3>{t('hackathons.no_manage')}</h3>
         )}
       </ManageHackathonContainer>
 
-      <h2 className="heading_section">Participating</h2>
+      <h2 className="heading_section">{t('hackathons.participating_section')}</h2>
       <ParticipantContainer>
         {meParticipants.length > 0 ? (
           meParticipants.map(participant => (
@@ -166,10 +171,11 @@ export default function Hackathons() {
                   <div>
                     <FaRegCalendarAlt color="#1437E3" size={18} />
                     <span>
-                      Start:{' '}
-                      {format(
+                      {t('hackathons.start')}{' '}
+                      {formatDate(
                         parseISO(participant.event_date),
-                        "MMMM dd',' yyyy"
+                        "MMMM dd',' yyyy",
+                        i18n.language
                       )}
                     </span>
                   </div>
@@ -177,10 +183,11 @@ export default function Hackathons() {
                   <div>
                     <FaRegCalendarAlt color="#1437E3" size={18} />
                     <span>
-                      End:{' '}
-                      {format(
+                      {t('hackathons.end')}{' '}
+                      {formatDate(
                         parseISO(participant.event_ending),
-                        "MMMM dd',' yyyy"
+                        "MMMM dd',' yyyy",
+                        i18n.language
                       )}
                     </span>
                   </div>
@@ -188,7 +195,7 @@ export default function Hackathons() {
                   <div>
                     <Link
                       to={`/app/hackathon/${participant.id}`}
-                      text="Go to event!"
+                      text={t('hackathons.go_to_event')}
                     />
                   </div>
                 </div>
@@ -196,7 +203,7 @@ export default function Hackathons() {
             </Card>
           ))
         ) : (
-          <h3>You are not participating of any hackathon!</h3>
+          <h3>{t('hackathons.no_participating')}</h3>
         )}
       </ParticipantContainer>
 

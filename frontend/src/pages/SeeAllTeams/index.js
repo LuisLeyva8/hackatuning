@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaUsers, FaExternalLinkAlt, FaUserCircle } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import api from '../../services/api';
 import Link from '../../components/Link';
@@ -14,6 +15,7 @@ export default function SeeAllTeams({ history, match }) {
   const [loading, setLoading] = useState(true);
   const [teams, setTeams] = useState([]);
   const [hackathon, setHackathon] = useState({});
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function laodteams() {
@@ -48,7 +50,7 @@ export default function SeeAllTeams({ history, match }) {
         >
           <Link
             to={`/app/hackathon/${id}`}
-            text="See participants without team"
+            text={t('see_all_teams.see_participants')}
           />
         </div>
 
@@ -63,7 +65,7 @@ export default function SeeAllTeams({ history, match }) {
                 <div className="team-content">
                   <div className="container">
                     <div className="creator">
-                      Created by{' '}
+                      {t('common.created_by')}{' '}
                       <RouterLink
                         target="_blank"
                         to={`/${team.creator.nickname}`}
@@ -75,13 +77,13 @@ export default function SeeAllTeams({ history, match }) {
 
                     <div className="members">
                       <FaUsers />
-                      <strong>Members:</strong>
+                      <strong>{t('common.members')}</strong>
                     </div>
 
                     <div className="member">
                       {team.members.length > 0
                         ? ''
-                        : 'This team has no members yet'}
+                        : t('common.no_members')}
                       {team.members.map(member => (
                         <RouterLink
                           target="_blank"

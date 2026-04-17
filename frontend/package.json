@@ -10,12 +10,15 @@
     "babel-eslint": "^10.0.3",
     "date-fns": "^2.0.0-beta.5",
     "history": "^4.10.0",
+    "i18next": "20",
+    "i18next-browser-languagedetector": "6",
     "immer": "^4.0.0",
     "polished": "^3.4.1",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.9.0",
+    "react-i18next": "11",
     "react-icons": "^3.7.0",
     "react-loading-screen": "^0.0.17",
     "react-paginate": "^6.3.0",
@@ -36,8 +39,8 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

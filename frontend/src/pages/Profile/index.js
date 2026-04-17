@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaGlobe } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import api from '../../services/api';
 
@@ -9,6 +10,7 @@ import { Container } from './styles';
 export default function Profile({ match, history }) {
   const [loading, setLoading] = useState(true);
   const { nickname } = match.params;
+  const { t } = useTranslation();
   const [profile, setProfile] = useState({
     urls: [{ id: '', url: '' }],
     roles: [{ id: '', name: '' }],
@@ -64,7 +66,7 @@ export default function Profile({ match, history }) {
 
       <div className="profile__content">
         <p>
-          {profile.bio ? profile.bio : 'This user does not have a biography'}
+          {profile.bio ? profile.bio : t('profile.no_bio')}
         </p>
       </div>
     </Container>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import { login } from '../../utils/auth';
 import { reduxLogin } from '../../store/modules/auth/actions';
@@ -15,6 +16,7 @@ export default function SignIn({ history }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -42,7 +44,7 @@ export default function SignIn({ history }) {
       setIsLoading(false);
 
       if (error.response.status === 429) {
-        errMsg = 'You have exceeded the retry limit, please try again later';
+        errMsg = t('signin.rate_limit_error');
       } else if (error.response.data.fields) {
         errMsg = error.response.data.fields[0].message;
       } else {
@@ -61,29 +63,29 @@ export default function SignIn({ history }) {
     <Container>
       <Form onSubmit={handleSubmit}>
         <img src={LogoIcon} alt="logo" style={{ marginBottom: 20 }} />
-        <h1>Sign in</h1>
-        <small>Please, provide your email and password</small>
+        <h1>{t('signin.title')}</h1>
+        <small>{t('signin.subtitle')}</small>
 
         <Input
-          label="Email:"
+          label={t('signin.email_label')}
           type="email"
-          placeholder="me@mail.com"
+          placeholder={t('signin.email_placeholder')}
           onChange={e => setEmail(e.target.value)}
           value={email}
         />
 
         <Input
-          label="Password:"
+          label={t('signin.password_label')}
           onChange={e => setPassword(e.target.value)}
           type="password"
-          placeholder="password"
+          placeholder={t('signin.password_placeholder')}
           value={password}
         />
 
-        <Button loading={isLoading ? 1 : 0} type="submit" text="Sign in" />
+        <Button loading={isLoading ? 1 : 0} type="submit" text={t('signin.button')} />
 
         <Link className="link" to="/app/register">
-          Register now!
+          {t('signin.register_link')}
         </Link>
       </Form>
 

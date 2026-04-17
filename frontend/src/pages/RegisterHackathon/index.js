@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import {
   Form,
@@ -17,6 +18,7 @@ import { Container } from './styles';
 export default function RegisterHackathon({ history }) {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState();
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     title: '',
     subtitle: '',
@@ -63,7 +65,7 @@ export default function RegisterHackathon({ history }) {
           emails: form.mentors,
         });
 
-      toast('Hackathon created!', {
+      toast(t('register_hackathon.success'), {
         className: 'toast-background-success',
         bodyClassName: 'toast-font-size',
         progressClassName: 'toast-progress-bar-success',
@@ -105,11 +107,11 @@ export default function RegisterHackathon({ history }) {
 
   return (
     <Container>
-      <h1 style={{ textAlign: 'center' }}>Register Hackathon</h1>
+      <h1 style={{ textAlign: 'center' }}>{t('register_hackathon.title')}</h1>
 
       <Form onSubmit={handleSubmit}>
         <p className="label" style={{ marginTop: '20px' }}>
-          Cover:
+          {t('register_hackathon.cover_label')}
         </p>
 
         <input
@@ -120,25 +122,25 @@ export default function RegisterHackathon({ history }) {
         />
 
         <Input
-          label="Title:"
+          label={t('register_hackathon.title_label')}
           type="text"
           value={form.title}
-          placeholder="Title:"
+          placeholder={t('register_hackathon.title_placeholder')}
           onChange={e => setForm({ ...form, title: e.target.value })}
         />
 
         <Input
-          label="Subtitle:"
+          label={t('register_hackathon.subtitle_label')}
           type="text"
-          placeholder="Subtitle:"
+          placeholder={t('register_hackathon.subtitle_placeholder')}
           value={form.subtitle}
           onChange={e => setForm({ ...form, subtitle: e.target.value })}
         />
 
         <TextArea
-          label="Description:"
+          label={t('register_hackathon.description_label')}
           value={form.description}
-          placeholder="Description:"
+          placeholder={t('register_hackathon.description_placeholder')}
           rows="7"
           onChange={e => setForm({ ...form, description: e.target.value })}
         />
@@ -148,7 +150,7 @@ export default function RegisterHackathon({ history }) {
           className="label"
           style={{ marginBottom: '10px' }}
         >
-          Is the event online?
+          {t('register_hackathon.online_label')}
           <input
             id="checkbox"
             type="checkbox"
@@ -160,7 +162,7 @@ export default function RegisterHackathon({ history }) {
 
         {form.online ? null : (
           <Input
-            label="Location:"
+            label={t('register_hackathon.location_label')}
             type="text"
             value={form.location}
             onChange={e => setForm({ ...form, location: e.target.value })}
@@ -168,32 +170,32 @@ export default function RegisterHackathon({ history }) {
         )}
 
         <Input
-          label="Min Participants:"
+          label={t('register_hackathon.min_participants_label')}
           type="number"
           value={form.min_participants}
           style={{ width: 100, marginLeft: 11 }}
-          placeholder="Min:"
+          placeholder={t('register_hackathon.min_placeholder')}
           onChange={e => setForm({ ...form, min_participants: e.target.value })}
         />
 
         <Input
-          label="Max Participants:"
+          label={t('register_hackathon.max_participants_label')}
           type="number"
-          placeholder="Max:"
+          placeholder={t('register_hackathon.max_placeholder')}
           value={form.max_participants}
           style={{ width: 100, marginLeft: 10 }}
           onChange={e => setForm({ ...form, max_participants: e.target.value })}
         />
 
         <TextArea
-          label="Awards:"
-          placeholder="Awards:"
+          label={t('register_hackathon.awards_label')}
+          placeholder={t('register_hackathon.awards_placeholder')}
           rows="4"
           value={form.awards}
           onChange={e => setForm({ ...form, awards: e.target.value })}
         />
 
-        <p className="label">Event beginning:</p>
+        <p className="label">{t('register_hackathon.event_beginning')}</p>
         <DatePicker
           className="input"
           id="event_date"
@@ -206,7 +208,7 @@ export default function RegisterHackathon({ history }) {
           onChange={date => setForm({ ...form, event_date: new Date(date) })}
         />
 
-        <p className="label">Event ending:</p>
+        <p className="label">{t('register_hackathon.event_ending')}</p>
         <DatePicker
           className="input"
           id="event_ending"
@@ -219,7 +221,7 @@ export default function RegisterHackathon({ history }) {
           onChange={date => setForm({ ...form, event_ending: new Date(date) })}
         />
 
-        <p className="label">End subscription date:</p>
+        <p className="label">{t('register_hackathon.end_subscription')}</p>
         <DatePicker
           className="input"
           id="deadline_subscription"
@@ -234,7 +236,7 @@ export default function RegisterHackathon({ history }) {
           }
         />
 
-        <p className="label">End team creation date:</p>
+        <p className="label">{t('register_hackathon.end_team_creation')}</p>
         <DatePicker
           className="input"
           id="deadline_team_creation"
@@ -249,19 +251,19 @@ export default function RegisterHackathon({ history }) {
           }
         />
 
-        <h2>Invite mentors:</h2>
+        <h2>{t('register_hackathon.invite_mentors')}</h2>
 
-        <small>Plese enter mentor's email.</small>
+        <small>{t('register_hackathon.mentor_email_hint')}</small>
 
         <InputArray
           values={form.mentors}
           onChange={onChangeMentorMail}
           addField={addMentorField}
           removeField={removeMentorField}
-          label="Email:"
+          label={t('register_hackathon.email_label')}
         />
 
-        <Button loading={isLoading ? 1 : 0} text="Send" type="submit" />
+        <Button loading={isLoading ? 1 : 0} text={t('register_hackathon.send_button')} type="submit" />
       </Form>
 
       <ToastContainer />

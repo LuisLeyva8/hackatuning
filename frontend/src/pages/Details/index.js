@@ -8,12 +8,14 @@ import {
   FaTrophy,
 } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
-import { format, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import api from '../../services/api';
 import { Form, Button } from '../../components/Form';
 import Link from '../../components/Link';
+import { formatDate } from '../../utils/dateLocale';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import DefaultCover from '../../assets/default_cover.jpg';
@@ -24,6 +26,7 @@ import { isAuthenticated } from '../../utils/auth';
 export default function Details({ match, history }) {
   const [loading, setLoading] = useState(true);
   const hackathonId = match.params.id;
+  const { t, i18n } = useTranslation();
   const [hackathon, setHackathon] = useState({
     cover: { url: '' },
     organizer: { name: '', avatar: { url: '' } },
@@ -32,19 +35,6 @@ export default function Details({ match, history }) {
   useEffect(() => {
     async function loadHackathon() {
       const { data } = await api.get(`/v1/hackathons/${hackathonId}`);
-
-      data.event_date = format(parseISO(data.event_date), 'MM/dd/yyyy');
-      data.event_ending = format(parseISO(data.event_ending), 'MM/dd/yyyy');
-
-      data.deadline_subscription = format(
-        parseISO(data.deadline_subscription),
-        'MM/dd/yyyy'
-      );
-
-      data.deadline_team_creation = format(
-        parseISO(data.deadline_team_creation),
-        'MM/dd/yyyy'
-      );
 
       setHackathon(data);
       setLoading(false);
@@ -78,6 +68,9 @@ export default function Details({ match, history }) {
     }
   }
 
+  const formatLocalDate = iso =>
+    formatDate(parseISO(iso), 'MM/dd/yyyy', i18n.language);
+
   return loading ? (
     <LoadingScreen />
   ) : (
@@ -87,7 +80,7 @@ export default function Details({ match, history }) {
           <h1>{hackathon.title}</h1>
           <div className="organizer">
             <h2>
-              <span>Organized by</span>
+              <span>{t('details.organized_by')}</span>
               <img
                 src={
                   hackathon.organizer.avatar
@@ -112,11 +105,11 @@ export default function Details({ match, history }) {
         <div className="header__button">
           {isAuthenticated() ? (
             hackathon.isParticipant ? (
-              <Link to={`/app/hackathon/${hackathon.id}`} text="Go to event" />
+              <Link to={`/app/hackathon/${hackathon.id}`} text={t('details.go_to_event')} />
             ) : (
               <Form onSubmit={handleSubmit}>
                 <Button
-                  text="Subscribe"
+                  text={t('details.subscribe')}
                   style={{ width: 240, margin: '20px auto' }}
                 />
               </Form>
@@ -124,7 +117,7 @@ export default function Details({ match, history }) {
           ) : (
             <Form onSubmit={handleSubmit}>
               <Button
-                text="Sign In"
+                text={t('details.sign_in')}
                 style={{ width: 240, margin: '20px auto' }}
               />
             </Form>
@@ -145,7 +138,7 @@ export default function Details({ match, history }) {
             <p>
               {hackathon.awards
                 ? hackathon.awards
-                : 'The creator of this hackathon has not reported any awards!'}
+                : t('details.no_awards')}
             </p>
           </div>
         </div>
@@ -155,31 +148,31 @@ export default function Details({ match, history }) {
             <div>
               <FaPenAlt />
               <span>
-                <strong>Registrations:</strong>
-                until {hackathon.deadline_subscription}
+                <strong>{t('details.registrations')}</strong>
+                {t('common.until')} {formatLocalDate(hackathon.deadline_subscription)}
               </span>
             </div>
 
             <div>
               <FaUsers />
               <span>
-                <strong>Create teams:</strong>
-                until {hackathon.deadline_team_creation}
+                <strong>{t('details.create_teams')}</strong>
+                {t('common.until')} {formatLocalDate(hackathon.deadline_team_creation)}
               </span>
             </div>
 
             <div>
               <FaRegCalendarAlt />
               <span>
-                <strong>Event:</strong>
-                {hackathon.event_date} to {hackathon.event_ending}
+                <strong>{t('details.event')}</strong>
+                {formatLocalDate(hackathon.event_date)} {t('details.to')} {formatLocalDate(hackathon.event_ending)}
               </span>
             </div>
 
             <div>
               <FaMapMarkerAlt />
               <span className="dates__locale">
-                {!hackathon.online ? hackathon.location : 'Online'}
+                {!hackathon.online ? hackathon.location : t('common.online')}
               </span>
             </div>
           </div>

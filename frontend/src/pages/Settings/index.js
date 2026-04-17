@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { FaPlus, FaTimes } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingScreen from '../../components/LoadScreen';
 import api from '../../services/api';
@@ -22,6 +23,7 @@ export default connect(mapStateToProps)(function Settings({ user }) {
   ]);
   const [avatar, setAvatar] = useState(null);
   const [isMentor, setIsMentor] = useState(false);
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     name: '',
     nickname: '',
@@ -85,7 +87,7 @@ export default connect(mapStateToProps)(function Settings({ user }) {
 
       await api.put(`/v1/users`, obj);
 
-      toast('Profile updated successfully!', {
+      toast(t('settings.success'), {
         className: 'toast-background-success',
         bodyClassName: 'toast-font-size',
         progressClassName: 'toast-progress-bar-success',
@@ -158,13 +160,13 @@ export default connect(mapStateToProps)(function Settings({ user }) {
       const { data } = await api.post(`/v1/files/users`, formData, config);
 
       if (data.url) {
-        toast('Avatar successfully changed!', {
+        toast(t('settings.avatar_success'), {
           className: 'toast-background-success',
           bodyClassName: 'toast-font-size',
           progressClassName: 'toast-progress-bar-success',
         });
       } else {
-        toast('There was an error uploading the avatar!', {
+        toast(t('settings.avatar_error'), {
           className: 'toast-background',
           bodyClassName: 'toast-font-size',
           progressClassName: 'toast-progress-bar',
@@ -190,7 +192,7 @@ export default connect(mapStateToProps)(function Settings({ user }) {
     <LoadingScreen />
   ) : (
     <Container>
-      <H1> Edite your profile </H1>
+      <H1>{t('settings.title')}</H1>
 
       <img
         id="avatarFiles"
@@ -201,7 +203,7 @@ export default connect(mapStateToProps)(function Settings({ user }) {
 
       <Form onSubmit={handleSubmit}>
         <p className="label" style={{ marginTop: '20px' }}>
-          Avatar: (550x500)
+          {t('settings.avatar_label')}
         </p>
         <input
           className="file"
@@ -211,45 +213,45 @@ export default connect(mapStateToProps)(function Settings({ user }) {
         />
 
         <Input
-          label="Name:"
+          label={t('settings.name_label')}
           value={form.name}
-          placeholder=" Your name here!"
+          placeholder={t('settings.name_placeholder')}
           onChange={e => setForm({ ...form, name: e.target.value })}
         />
 
         <Input
-          label="nickname:"
+          label={t('settings.nickname_label')}
           value={form.nickname}
-          placeholder="Nickname"
+          placeholder={t('settings.nickname_placeholder')}
           onChange={e => setForm({ ...form, nickname: e.target.value })}
         />
 
         {isMentor ? (
           <Input
-            label="calendly:"
+            label={t('settings.calendly_label')}
             value={form.calendly}
-            placeholder="Calendly url"
+            placeholder={t('settings.calendly_placeholder')}
             onChange={e => setForm({ ...form, calendly: e.target.value })}
           />
         ) : null}
 
         <TextArea
-          label="Bio:"
-          placeholder=" Tell me about you! I want to know..."
+          label={t('settings.bio_label')}
+          placeholder={t('settings.bio_placeholder')}
           rows="5"
           value={form.bio}
           onChange={e => setForm({ ...form, bio: e.target.value })}
         />
 
-        <h4>Useful urls:</h4>
-        <small>Github link, linkedin or personal website</small>
+        <h4>{t('settings.useful_urls')}</h4>
+        <small>{t('settings.urls_hint')}</small>
         <div className="urls">
           <div className="url_box">
             {form.urls.map((url, index) => (
               <div key={index} className="inner_input">
                 <Input
                   style={{ marginBottom: '10px' }}
-                  placeholder="Some useful links here"
+                  placeholder={t('settings.url_placeholder')}
                   value={url}
                   onChange={e => onChangeUrl(e, index)}
                 />
@@ -272,7 +274,7 @@ export default connect(mapStateToProps)(function Settings({ user }) {
           </button>
         </div>
 
-        <h4>Select Roles:</h4>
+        <h4>{t('settings.select_roles')}</h4>
         <div className="roles">
           {roles.map((role, roleIndex) => (
             <label key={role.name} htmlFor={role.name}>
@@ -289,7 +291,7 @@ export default connect(mapStateToProps)(function Settings({ user }) {
           ))}
         </div>
 
-        <Button loading={isLoading ? 1 : 0} text="Send" />
+        <Button loading={isLoading ? 1 : 0} text={t('settings.send_button')} />
       </Form>
       <ToastContainer />
     </Container>

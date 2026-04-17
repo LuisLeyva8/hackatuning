@@ -3,6 +3,7 @@ import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import './config/reactotronConfig';
+import './config/i18n';
 
 import history from './services/history';
 import Layout from './components/Layout';

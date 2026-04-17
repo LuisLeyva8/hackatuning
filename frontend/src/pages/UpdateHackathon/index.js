@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +16,7 @@ export default function UpdateHackathon({ match }) {
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [cover, setCover] = useState();
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     title: '',
     subtitle: '',
@@ -73,7 +75,7 @@ export default function UpdateHackathon({ match }) {
     try {
       await api.put(`/v1/hackathons/${id}`, obj);
 
-      toast('Hackathon successfully updated!', {
+      toast(t('update_hackathon.success'), {
         className: 'toast-background-success',
         bodyClassName: 'toast-font-size',
         progressClassName: 'toast-progress-bar-success',
@@ -119,13 +121,13 @@ export default function UpdateHackathon({ match }) {
       );
 
       if (data.url) {
-        toast('Cover successfully changed!', {
+        toast(t('update_hackathon.cover_success'), {
           className: 'toast-background-success',
           bodyClassName: 'toast-font-size',
           progressClassName: 'toast-progress-bar-success',
         });
       } else {
-        toast('There was an error uploading the cover!', {
+        toast(t('update_hackathon.cover_error'), {
           className: 'toast-background',
           bodyClassName: 'toast-font-size',
           progressClassName: 'toast-progress-bar',
@@ -151,7 +153,7 @@ export default function UpdateHackathon({ match }) {
     <LoadingScreen />
   ) : (
     <Container>
-      <h1>Update Hackathon</h1>
+      <h1>{t('update_hackathon.title')}</h1>
 
       <Form onSubmit={handleSubmit}>
         <img
@@ -160,7 +162,7 @@ export default function UpdateHackathon({ match }) {
           style={{ maxWidth: 200, maxHeight: 200, margin: '30px auto' }}
         />
 
-        <p className="label">Cover: (900x720)</p>
+        <p className="label">{t('update_hackathon.cover_label')}</p>
 
         <label htmlFor="file">
           <input
@@ -172,19 +174,19 @@ export default function UpdateHackathon({ match }) {
         </label>
 
         <Input
-          label="Title:"
+          label={t('update_hackathon.title_label')}
           onChange={e => setForm({ ...form, title: e.target.value })}
           value={form.title}
         />
 
         <Input
-          label="Subtitle:"
+          label={t('update_hackathon.subtitle_label')}
           onChange={e => setForm({ ...form, subtitle: e.target.value })}
           value={form.subtitle}
         />
 
         <TextArea
-          label="Description:"
+          label={t('update_hackathon.description_label')}
           onChange={e => setForm({ ...form, description: e.target.value })}
           value={form.description}
           rows="7"
@@ -195,7 +197,7 @@ export default function UpdateHackathon({ match }) {
           className="label"
           style={{ marginBottom: '10px' }}
         >
-          Is the event online?
+          {t('update_hackathon.online_label')}
           <input
             checked={form.online}
             id="checkbox"
@@ -208,21 +210,21 @@ export default function UpdateHackathon({ match }) {
 
         {!form.online ? (
           <Input
-            label="Location:"
+            label={t('update_hackathon.location_label')}
             onChange={e => setForm({ ...form, location: e.target.value })}
             value={form.location}
           />
         ) : null}
 
         <TextArea
-          label="Awards:"
+          label={t('update_hackathon.awards_label')}
           rows="4"
           onChange={e => setForm({ ...form, awards: e.target.value })}
           value={form.awards}
         />
 
         <Input
-          label="Min participants:"
+          label={t('update_hackathon.min_participants_label')}
           type="number"
           onChange={e => setForm({ ...form, min_participants: e.target.value })}
           value={form.min_participants}
@@ -230,14 +232,14 @@ export default function UpdateHackathon({ match }) {
         />
 
         <Input
-          label="Max participants:"
+          label={t('update_hackathon.max_participants_label')}
           type="number"
           onChange={e => setForm({ ...form, max_participants: e.target.value })}
           value={form.max_participants}
           style={{ width: 100, marginLeft: 10 }}
         />
 
-        <p className="label">Event beginning:</p>
+        <p className="label">{t('update_hackathon.event_beginning')}</p>
         <DatePicker
           className="input"
           id="event_date"
@@ -250,7 +252,7 @@ export default function UpdateHackathon({ match }) {
           onChange={date => setForm({ ...form, event_date: new Date(date) })}
         />
 
-        <p className="label">Event ending:</p>
+        <p className="label">{t('update_hackathon.event_ending')}</p>
         <DatePicker
           className="input"
           id="event_ending"
@@ -263,7 +265,7 @@ export default function UpdateHackathon({ match }) {
           onChange={date => setForm({ ...form, event_ending: new Date(date) })}
         />
 
-        <p className="label">End subscription date:</p>
+        <p className="label">{t('update_hackathon.end_subscription')}</p>
         <DatePicker
           className="input"
           id="deadline_subscription"
@@ -278,7 +280,7 @@ export default function UpdateHackathon({ match }) {
           }
         />
 
-        <p className="label">End team creation date:</p>
+        <p className="label">{t('update_hackathon.end_team_creation')}</p>
         <DatePicker
           className="input"
           id="deadline_team_creation"
@@ -293,7 +295,7 @@ export default function UpdateHackathon({ match }) {
           }
         />
 
-        <Button loading={isLoading ? 1 : 0} type="submit" text="Send" />
+        <Button loading={isLoading ? 1 : 0} type="submit" text={t('update_hackathon.send_button')} />
       </Form>
 
       <ToastContainer />

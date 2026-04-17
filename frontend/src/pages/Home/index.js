@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { format, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { FaMapMarkerAlt, FaRegCalendarAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import api from '../../services/api';
+import { formatDate } from '../../utils/dateLocale';
 
 import DefaultCover from '../../assets/default_cover.jpg';
 import {
@@ -22,6 +24,7 @@ export default function Home({ history }) {
   const [hackaCarousel, setHackaCarousel] = useState([]);
   const [hackathons, setHackathons] = useState([]);
   const [pagination, setPagination] = useState({});
+  const { t, i18n } = useTranslation();
   const perPage = 8;
   const searchURLParam = new URLSearchParams(history.location.search);
   const page = searchURLParam.get('page') || 1;
@@ -74,27 +77,27 @@ export default function Home({ history }) {
               <h2>{hackathon.title}</h2>
               <div className="organized">
                 <span>
-                  Organized by <strong>{hackathon.organizer.name}</strong>
+                  {t('common.organized_by')} <strong>{hackathon.organizer.name}</strong>
                 </span>
               </div>
 
               <div>
                 <FaRegCalendarAlt color="#fff" size={21} />
                 <span>
-                  {format(parseISO(hackathon.event_date), "MMMM dd',' yyyy")}
+                  {formatDate(parseISO(hackathon.event_date), "MMMM dd',' yyyy", i18n.language)}
                 </span>
               </div>
 
               <div>
                 <FaMapMarkerAlt color="#fff" size={21} />
-                <span>{hackathon.online ? 'Online' : hackathon.location}</span>
+                <span>{hackathon.online ? t('common.online') : hackathon.location}</span>
               </div>
 
               {hackathon.isParticipant ? (
-                <Link to={`/app/hackathon/${hackathon.id}`}>Go to event</Link>
+                <Link to={`/app/hackathon/${hackathon.id}`}>{t('home.go_to_event')}</Link>
               ) : (
                 <Link to={`/app/hackathon/${hackathon.id}/details`}>
-                  Details
+                  {t('home.details')}
                 </Link>
               )}
             </div>
@@ -103,7 +106,7 @@ export default function Home({ history }) {
       </Carousel>
 
       <PageContainer>
-        <h1>Find Hackathons</h1>
+        <h1>{t('home.find_hackathons')}</h1>
         <CardContainer>
           {hackathons.map(hackathon => (
             <Card
@@ -118,16 +121,17 @@ export default function Home({ history }) {
                 <div className="card_content">
                   <div className="organized">
                     <span>
-                      Organized by <strong>{hackathon.organizer.name}</strong>
+                      {t('common.organized_by')} <strong>{hackathon.organizer.name}</strong>
                     </span>
                   </div>
 
                   <div>
                     <FaRegCalendarAlt color="#1437E3" size={18} />
                     <span>
-                      {format(
+                      {formatDate(
                         parseISO(hackathon.event_date),
-                        "MMMM dd',' yyyy"
+                        "MMMM dd',' yyyy",
+                        i18n.language
                       )}
                     </span>
                   </div>
@@ -135,17 +139,17 @@ export default function Home({ history }) {
                   <div>
                     <FaMapMarkerAlt color="#1437E3" size={18} />
                     <span>
-                      {hackathon.online ? 'Online' : hackathon.location}
+                      {hackathon.online ? t('common.online') : hackathon.location}
                     </span>
                   </div>
 
                   {hackathon.isParticipant ? (
                     <Link to={`/app/hackathon/${hackathon.id}`}>
-                      Go to event
+                      {t('home.go_to_event')}
                     </Link>
                   ) : (
                     <Link to={`/app/hackathon/${hackathon.id}/details`}>
-                      Details
+                      {t('home.details')}
                     </Link>
                   )}
                 </div>

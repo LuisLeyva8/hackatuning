@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaPlus, FaTimes } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import api from '../../services/api';
 import { login } from '../../utils/auth';
@@ -14,6 +15,7 @@ import { Container, H1 } from './styles';
 
 export default function SignUp({ history }) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [roles, setRoles] = useState([]);
   const [form, setForm] = useState({
@@ -51,15 +53,12 @@ export default function SignUp({ history }) {
         roles: form.skills,
       });
 
-      toast(
-        'Your registration has been successfully completed, now just sign in!',
-        {
-          className: 'toast-background-success',
-          bodyClassName: 'toast-font-size',
-          progressClassName: 'toast-progress-bar-success',
-          autoClose: 1500,
-        }
-      );
+      toast(t('signup.success'), {
+        className: 'toast-background-success',
+        bodyClassName: 'toast-font-size',
+        progressClassName: 'toast-progress-bar-success',
+        autoClose: 1500,
+      });
 
       const { data } = await api.post('/v1/sessions', {
         email: form.email,
@@ -123,58 +122,56 @@ export default function SignUp({ history }) {
   return (
     <Container>
       <img src={LogoIcon} alt="Logo" />
-      <H1> Register </H1>
-      <small className="subTitle">Create an account to use our services.</small>
+      <H1>{t('signup.title')}</H1>
+      <small className="subTitle">{t('signup.subtitle')}</small>
 
       <Form onSubmit={handleSubmit}>
         <Input
-          label="Name:"
+          label={t('signup.name_label')}
           value={form.name}
-          placeholder="John Doe"
+          placeholder={t('signup.name_placeholder')}
           onChange={e => setForm({ ...form, name: e.target.value })}
         />
 
         <Input
-          label="Nickname:"
+          label={t('signup.nickname_label')}
           value={form.nickname}
-          placeholder="johndoe"
+          placeholder={t('signup.nickname_placeholder')}
           onChange={e => setForm({ ...form, nickname: e.target.value })}
         />
 
         <Input
-          label="Email:"
+          label={t('signup.email_label')}
           type="email"
           value={form.email}
-          placeholder="john@doe.com"
+          placeholder={t('signup.email_placeholder')}
           onChange={e => setForm({ ...form, email: e.target.value })}
         />
 
         <Input
-          label="Password:"
+          label={t('signup.password_label')}
           value={form.password}
-          placeholder="***"
+          placeholder={t('signup.password_placeholder')}
           type="password"
           onChange={e => setForm({ ...form, password: e.target.value })}
         />
 
         <TextArea
-          label="Bio:"
+          label={t('signup.bio_label')}
           value={form.bio}
-          placeholder="Tell me about you! I want to know..."
+          placeholder={t('signup.bio_placeholder')}
           rows="5"
           onChange={e => setForm({ ...form, bio: e.target.value })}
         />
 
-        <h4 className="label">Useful urls:</h4>
-        <small style={{ textAlign: 'left' }}>
-          Github link, linkedin or personal website
-        </small>
+        <h4 className="label">{t('signup.useful_urls')}</h4>
+        <small style={{ textAlign: 'left' }}>{t('signup.urls_hint')}</small>
         <div className="urls">
           <div className="url_box">
             {form.urls.map((url, index) => (
               <div key={index} className="inner_input">
                 <Input
-                  placeholder="Some useful links here"
+                  placeholder={t('signup.url_placeholder')}
                   value={url}
                   onChange={e => onChangeUrl(e, index)}
                   style={{ marginBottom: '10px' }}
@@ -199,7 +196,7 @@ export default function SignUp({ history }) {
         </div>
 
         <h4 className="label" style={{ marginTop: '5x' }}>
-          Select Roles:
+          {t('signup.select_roles')}
         </h4>
         <div className="roles">
           {roles.map(role => (
@@ -218,12 +215,12 @@ export default function SignUp({ history }) {
           ))}
         </div>
 
-        <Button loading={isLoading ? 1 : 0} type="submit" text="Send" />
+        <Button loading={isLoading ? 1 : 0} type="submit" text={t('signup.send_button')} />
 
-        <span className="or">OR</span>
+        <span className="or">{t('signup.or_separator')}</span>
 
         <Link className="link" to="/app/login">
-          Login with existing account!
+          {t('signup.login_link')}
         </Link>
       </Form>
       <ToastContainer />

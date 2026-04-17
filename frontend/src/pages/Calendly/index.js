@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 
 import { Input, Form, Button } from '../../components/Form';
@@ -13,6 +14,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(function Calendly({ user, history }) {
   const [calendly, setCalendly] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function loadUser() {
@@ -33,7 +35,7 @@ export default connect(mapStateToProps)(function Calendly({ user, history }) {
         calendly,
       });
 
-      toast('Calendly url updated!', {
+      toast(t('calendly.success'), {
         className: 'toast-background-success',
         bodyClassName: 'toast-font-size',
         progressClassName: 'toast-progress-bar-success',
@@ -61,20 +63,20 @@ export default connect(mapStateToProps)(function Calendly({ user, history }) {
 
   return (
     <Container onSubmit={handleSubmit}>
-      <h1>You are now a mentor!</h1>
+      <h1>{t('calendly.title')}</h1>
       <small>
-        Please add your calendly url, if you are not sure what it is, here is
-        how you can get yours: <a href="https://calendly.com/">Calendly.</a>
+        {t('calendly.description')}{' '}
+        <a href="https://calendly.com/">Calendly.</a>
       </small>
 
       <Form>
         <Input
-          label="Calendly url:"
+          label={t('calendly.url_label')}
           onChange={e => setCalendly(e.target.value)}
           value={calendly}
         />
 
-        <Button loading={isLoading ? 1 : 0} text="Send" />
+        <Button loading={isLoading ? 1 : 0} text={t('calendly.send_button')} />
       </Form>
 
       <ToastContainer />

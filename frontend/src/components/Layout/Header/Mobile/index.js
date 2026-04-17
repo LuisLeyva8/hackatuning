@@ -2,14 +2,17 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FaCog, FaHome, FaPlus, FaEnvelope } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import InvitationCount from '../../../InvitationCount';
+import LanguageSwitcher from '../../../LanguageSwitcher';
 import { logout } from '../../../../utils/auth';
 import { reduxLogout } from '../../../../store/modules/auth/actions';
 
 import { StyledUl, NotificationContianer } from './styles';
 
-export default function Desktop({ count, history }) {
+export default function Mobile({ count, history }) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   async function handleLogout() {
     logout();
@@ -40,7 +43,7 @@ export default function Desktop({ count, history }) {
         <li>
           <NavLink className="ui__item" to="/" exact activeClassName="selected">
             <FaHome color="#1437E3" size={22} />
-            <span>Home</span>
+            <span>{t('nav.home')}</span>
           </NavLink>
         </li>
         <li>
@@ -50,13 +53,13 @@ export default function Desktop({ count, history }) {
             activeClassName="selected"
           >
             <FaPlus color="#1437E3" size={22} />
-            <span>Add Hackathon</span>
+            <span>{t('nav.add_hackathon')}</span>
           </NavLink>
         </li>
         <li onClick={() => handleSettings()}>
           <div className="ui__item ui__item--relative">
             <FaCog color="#1437E3" size={22} />
-            <span>Settings</span>
+            <span>{t('nav.settings')}</span>
 
             <ul className="ui__sub" id="ui__sub">
               <li className="ui__subitem">
@@ -65,14 +68,18 @@ export default function Desktop({ count, history }) {
                   to="/app/settings"
                   activeClassName="selected"
                 >
-                  Edit Profile
+                  {t('nav.edit_profile')}
                 </NavLink>
               </li>
 
               <li className="ui__subitem">
                 <a className="ui__sublink" onClick={() => handleLogout()}>
-                  Logout
+                  {t('nav.logout')}
                 </a>
+              </li>
+
+              <li className="ui__subitem" style={{ padding: '8px 16px' }}>
+                <LanguageSwitcher />
               </li>
             </ul>
           </div>

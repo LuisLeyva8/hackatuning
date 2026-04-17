@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { FaUsers, FaExternalLinkAlt, FaUserCircle } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import api from '../../services/api';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +14,7 @@ import { Container, Content } from './styles';
 export default function Invitations() {
   const [loading, setLoading] = useState(true);
   const [invites, setInvites] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function loadInvites() {
@@ -37,7 +39,7 @@ export default function Invitations() {
     try {
       await api.put(`/v1/teams/invites/${id}`);
 
-      toast(`You are now part of team ${team}`, {
+      toast(t('invitations.accepted', { team }), {
         className: 'toast-background-success',
         bodyClassName: 'toast-font-size',
         progressClassName: 'toast-progress-bar-success',
@@ -64,7 +66,7 @@ export default function Invitations() {
         denied: true,
       });
 
-      toast(`You Declined the invitation from team ${team}`, {
+      toast(t('invitations.declined', { team }), {
         className: 'toast-background-success',
         bodyClassName: 'toast-font-size',
         progressClassName: 'toast-progress-bar-success',
@@ -99,13 +101,13 @@ export default function Invitations() {
 
               <div className="team-content">
                 <p className="title">
-                  Team of {''}
+                  {t('teams.team_of')}{' '}
                   <strong>{invite.team.hackathon.title}</strong>
                 </p>
 
                 <div className="container">
                   <div className="creator">
-                    Created by{' '}
+                    {t('common.created_by')}{' '}
                     <RouterLink
                       target="_blank"
                       to={`/${invite.team.creator.nickname}`}
@@ -117,13 +119,13 @@ export default function Invitations() {
 
                   <div className="members">
                     <FaUsers />
-                    <strong>Members:</strong>
+                    <strong>{t('common.members')}</strong>
                   </div>
 
                   <div className="member">
                     {invite.team.members.length > 0
                       ? ''
-                      : 'This team has no members yet'}
+                      : t('common.no_members')}
                     {invite.team.members.map(member => (
                       <RouterLink
                         target="_blank"
@@ -140,7 +142,7 @@ export default function Invitations() {
 
                 <div className="actions">
                   <Button
-                    text="Accecpt"
+                    text={t('invitations.accept')}
                     onClick={() =>
                       handleAccept(
                         invite.id,
@@ -152,7 +154,7 @@ export default function Invitations() {
                   <Button
                     style={{ marginLeft: '15px' }}
                     color="#e3133e"
-                    text="Decline"
+                    text={t('invitations.decline')}
                     onClick={() =>
                       handleDecline(
                         invite.id,
@@ -166,7 +168,7 @@ export default function Invitations() {
             </CardTeam>
           ))
         ) : (
-          <h1>No invites</h1>
+          <h1>{t('invitations.no_invites')}</h1>
         )}
       </Content>
       <ToastContainer />

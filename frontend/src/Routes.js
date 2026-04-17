@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { IsLogged, PrivateRoute } from './utils/customRoutes';
 
@@ -19,7 +20,9 @@ import Teams from './pages/Teams';
 import SeeAllTeams from './pages/SeeAllTeams';
 import Claendly from './pages/Calendly';
 
-const Routes = () => (
+const Routes = () => {
+  const { t } = useTranslation();
+  return (
   <Switch>
     <Route exact path="/" component={Home} />
     <IsLogged path="/app/login" component={SignIn} />
@@ -48,9 +51,10 @@ const Routes = () => (
 
     <PrivateRoute path="/app/calendly" component={Claendly} />
 
-    <Route path="/app/internal-error" render={() => <h1>Internal error</h1>} />
-    <Route path="*" render={() => <h1>Not found</h1>} />
+    <Route path="/app/internal-error" render={() => <h1>{t('routes.internal_error')}</h1>} />
+    <Route path="*" render={() => <h1>{t('routes.not_found')}</h1>} />
   </Switch>
-);
+  );
+};
 
 export default Routes;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { Link as RouterLink } from 'react-router-dom';
 import { FaExternalLinkAlt, FaUserCircle, FaUsers } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import api from '../../services/api';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +16,7 @@ export default function Teams() {
   const [loading, setLoading] = useState(true);
   const [manageTeams, setManageTeams] = useState([]);
   const [teams, setTeams] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function loadData() {
@@ -40,12 +42,12 @@ export default function Teams() {
   async function handleTeamDelete(id) {
     try {
       // eslint-disable-next-line no-alert
-      const action = window.confirm('Are you sure about that?');
+      const action = window.confirm(t('common.confirm_delete'));
 
       if (action) {
         await api.delete(`/v1/teams/${id}`);
 
-        toast('Team was deleted!', {
+        toast(t('teams.deleted'), {
           className: 'toast-background-success',
           bodyClassName: 'toast-font-size',
           progressClassName: 'toast-progress-bar-success',
@@ -71,8 +73,8 @@ export default function Teams() {
     <LoadingScreen />
   ) : (
     <Container>
-      <h1 style={{ textAlign: 'center' }}>My Teams</h1>
-      <h2 className="heading_section">Manage your teams</h2>
+      <h1 style={{ textAlign: 'center' }}>{t('teams.title')}</h1>
+      <h2 className="heading_section">{t('teams.manage_section')}</h2>
 
       <ManageTeamsContainer>
         {manageTeams.length > 0 ? (
@@ -85,7 +87,7 @@ export default function Teams() {
 
                 <div className="team-content">
                   <p className="title">
-                    Team of{' '}
+                    {t('teams.team_of')}{' '}
                     <RouterLink
                       to={`/app/hackathon/${team.hackathon.id}`}
                       className="link link--black"
@@ -96,7 +98,7 @@ export default function Teams() {
 
                   <div className="container">
                     <div className="creator">
-                      Created by{' '}
+                      {t('common.created_by')}{' '}
                       <RouterLink
                         target="_blank"
                         to={`/${team.creator.nickname}`}
@@ -108,13 +110,13 @@ export default function Teams() {
 
                     <div className="members">
                       <FaUsers />
-                      <strong>Members:</strong>
+                      <strong>{t('common.members')}</strong>
                     </div>
 
                     <div className="member">
                       {team.members.length > 0
                         ? ''
-                        : 'This team has no members yet'}
+                        : t('common.no_members')}
                       {team.members.map(member => (
                         <RouterLink
                           target="_blank"
@@ -132,11 +134,11 @@ export default function Teams() {
                   <div className="actions">
                     <Link
                       to={`/app/hackathon/team/${team.id}/manage`}
-                      text="edit"
+                      text={t('common.edit')}
                       style={{ marginLeft: '15px' }}
                     />
                     <Button
-                      text="Delete"
+                      text={t('common.delete')}
                       color="#e3133e"
                       style={{ marginLeft: '15px' }}
                       onClick={() => handleTeamDelete(team.id)}
@@ -147,11 +149,11 @@ export default function Teams() {
             </div>
           ))
         ) : (
-          <h3>No teams to manage</h3>
+          <h3>{t('teams.no_manage_teams')}</h3>
         )}
       </ManageTeamsContainer>
 
-      <h2 className="heading_section">Teams I participate</h2>
+      <h2 className="heading_section">{t('teams.participate_section')}</h2>
       <TeamsContainer>
         {teams.length > 0 ? (
           teams.map(team => (
@@ -163,13 +165,13 @@ export default function Teams() {
 
                 <div className="team-content">
                   <p className="title">
-                    Team of {''}
+                    {t('teams.team_of')}{' '}
                     <strong>{team.team.hackathon.title}</strong>
                   </p>
 
                   <div className="container">
                     <div className="creator">
-                      Created by{' '}
+                      {t('common.created_by')}{' '}
                       <RouterLink
                         target="_blank"
                         to={`/${team.team.creator.nickname}`}
@@ -181,13 +183,13 @@ export default function Teams() {
 
                     <div className="members">
                       <FaUsers />
-                      <strong>Members:</strong>
+                      <strong>{t('common.members')}</strong>
                     </div>
 
                     <div className="member">
                       {team.team.members.length > 0
                         ? ''
-                        : 'This team has no members yet'}
+                        : t('common.no_members')}
                       {team.team.members.map(member => (
                         <RouterLink
                           target="_blank"
@@ -205,7 +207,7 @@ export default function Teams() {
                   <div className="actions">
                     <Link
                       to={`/app/hackathon/${team.team.hackathon.id}`}
-                      text="Go To Event"
+                      text={t('teams.go_to_event')}
                     />
                   </div>
                 </div>
@@ -213,7 +215,7 @@ export default function Teams() {
             </div>
           ))
         ) : (
-          <h3>No teams</h3>
+          <h3>{t('teams.no_teams')}</h3>
         )}
       </TeamsContainer>
 

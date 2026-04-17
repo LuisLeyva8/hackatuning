@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
+import { useTranslation } from 'react-i18next';
 import LoadingScreen from '../../components/LoadScreen';
 import api from '../../services/api';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,6 +15,7 @@ import { Container, TabContainer, Card, Content } from './styles';
 export default function HackathonEvent({ match, history }) {
   const perPage = 10;
   const { id } = match.params;
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState();
   const [isTeamOwner, setIsTeamOwner] = useState({ state: false, id: '' });
@@ -84,7 +86,7 @@ export default function HackathonEvent({ match, history }) {
 
       setIsTeamOwner({ id: data.id, state: true });
 
-      toast('You have created your team, you can now invite participants!', {
+      toast(t('hackathon_event.team_created'), {
         className: 'toast-background-success',
         bodyClassName: 'toast-font-size',
         progressClassName: 'toast-progress-bar-success',
@@ -113,7 +115,7 @@ export default function HackathonEvent({ match, history }) {
 
       setParticipants(newParticipants);
 
-      toast(`${nickname} was invited!`, {
+      toast(t('hackathon_event.invited', { nickname }), {
         className: 'toast-background-success',
         bodyClassName: 'toast-font-size',
         progressClassName: 'toast-progress-bar-success',
@@ -173,7 +175,7 @@ export default function HackathonEvent({ match, history }) {
             <div className="search" style={{ marginBottom: 20 }}>
               <div className="search__select">
                 <Select
-                  label="Roles:"
+                  label={t('hackathon_event.roles_label')}
                   options={roles}
                   onChange={e => handleSelectChange(e)}
                 />
@@ -181,9 +183,9 @@ export default function HackathonEvent({ match, history }) {
 
               <div className="search__text">
                 <Input
-                  label="Name, nickname or email:"
+                  label={t('hackathon_event.search_label')}
                   value={search}
-                  placeholder="Search:"
+                  placeholder={t('hackathon_event.search_placeholder')}
                   onChange={e => handleSearchChange(e)}
                 />
               </div>
@@ -192,19 +194,19 @@ export default function HackathonEvent({ match, history }) {
             <div className="buttons">
               <Link
                 to={`/app/hackathon/${id}/teams`}
-                text="See All Teams"
+                text={t('hackathon_event.see_all_teams')}
                 style={{ marginRight: '20px' }}
               />
 
               {isTeamOwner.state ? (
                 <Link
                   to={`/app/hackathon/team/${isTeamOwner.id}/manage`}
-                  text="Manage Team"
+                  text={t('hackathon_event.manage_team')}
                 />
               ) : (
                 <Button
                   type="button"
-                  text="Create team"
+                  text={t('hackathon_event.create_team')}
                   onClick={handleCraeteTeam}
                 />
               )}
@@ -244,7 +246,7 @@ export default function HackathonEvent({ match, history }) {
                             to={`/${participant.participant.nickname}`}
                             className="link"
                           >
-                            Full Profile
+                            {t('hackathon_event.full_profile')}
                           </RouterLink>
 
                           {isTeamOwner.state &&
@@ -252,7 +254,9 @@ export default function HackathonEvent({ match, history }) {
                             <Button
                               type="button"
                               text={
-                                participant.statusInvite ? 'sent' : 'invite'
+                                participant.statusInvite
+                                  ? t('hackathon_event.sent')
+                                  : t('hackathon_event.invite')
                               }
                               disabled={!!participant.statusInvite}
                               onClick={() =>

@@ -2,14 +2,17 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FaEnvelope, FaCog } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { logout } from '../../../../utils/auth';
 import { reduxLogout } from '../../../../store/modules/auth/actions';
 
 import InvitationCount from '../../../InvitationCount';
+import LanguageSwitcher from '../../../LanguageSwitcher';
 import { TabLink, StyledUl } from './styles';
 
 export default function Desktop({ count, history }) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   async function handleLogout() {
     logout();
@@ -21,7 +24,7 @@ export default function Desktop({ count, history }) {
     <StyledUl>
       <li>
         <Link to="/app/register-hackathon" className="create_hackathon">
-          Create Hackathon
+          {t('nav.create_hackathon')}
         </Link>
       </li>
       <li>
@@ -30,10 +33,10 @@ export default function Desktop({ count, history }) {
           className="left"
           activeClassName="selected"
         >
-          Hackathons
+          {t('nav.hackathons')}
         </TabLink>
         <TabLink to="/app/teams" className="right" activeClassName="selected">
-          Teams
+          {t('nav.teams')}
         </TabLink>
       </li>
       <li className="notification_container">
@@ -47,8 +50,11 @@ export default function Desktop({ count, history }) {
           <FaCog color="#1437E3" size={24} />
         </Link>
       </li>
+      <li>
+        <LanguageSwitcher />
+      </li>
       <li className="logout" onClick={() => handleLogout()}>
-        Logout
+        {t('nav.logout')}
       </li>
     </StyledUl>
   );
